@@ -56,7 +56,7 @@ function nextInterval() {
     }
 
     nextInterval();
-  }, 30000);
+  }, 120000);
 }
 
 nextInterval();
