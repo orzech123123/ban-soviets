@@ -46,7 +46,7 @@ function nextInterval() {
         log.includes(ip)
       ).length;
 
-      if (recentFailsCount < 10) {
+      if (recentFailsCount < 6) {
         console.log(`${ip} - SKIPPING, only ${recentFailsCount} recently`);
         continue;
       }
