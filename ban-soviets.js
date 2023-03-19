@@ -2,12 +2,12 @@ const { execSync } = require("child_process");
 
 function nextInterval() {
   setTimeout(function () {
-    let passwordDidNotMatch = execSync(
+    let passwordDidNotMatch = tryExecSync(
       `docker logs 364c44949241 --tail 100 | grep Password\\ did\\ not\\ match`
     )
       .toString()
       .split(/\r?\n/);
-    let couldNotMatchLogin = execSync(
+    let couldNotMatchLogin = tryExecSync(
       `docker logs 364c44949241 --tail 100 | grep Could\\ not\\ find\\ a\\ login\\ matching`
     )
       .toString()
@@ -30,10 +30,7 @@ function nextInterval() {
     let ipsToBlockDistinct = [...new Set(ipsToBlockFromDockerLog)];
 
     for (const ip of ipsToBlockDistinct) {
-      let ipTablesForIp = "";
-      try {
-        ipTablesForIp = execSync(`iptables -S | grep ${ip}`);
-      } catch {}
+      let ipTablesForIp = tryExecSync(`iptables -S | grep ${ip}`);
 
       ipTablesForIp = ipTablesForIp.toString().split(/\r?\n/);
 
@@ -51,12 +48,22 @@ function nextInterval() {
         continue;
       }
 
-      execSync(`iptables --insert DOCKER-USER --destination ${ip} --jump REJECT`)
+      execSync(
+        `iptables --insert DOCKER-USER --destination ${ip} --jump REJECT`
+      );
       console.log(`${ip} - BLOCKED`);
     }
 
     nextInterval();
   }, 120000);
+}
+
+function tryExecSync(command) {
+  try {
+    return execSync(command);
+  } catch {
+    return "";
+  }
 }
 
 nextInterval();
