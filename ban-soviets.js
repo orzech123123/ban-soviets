@@ -55,7 +55,7 @@ function nextInterval() {
     }
 
     nextInterval();
-  }, 120000);
+  }, 20000);
 }
 
 function tryExecSync(command) {
