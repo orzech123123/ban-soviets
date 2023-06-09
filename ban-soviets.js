@@ -3,12 +3,12 @@ const { execSync } = require("child_process");
 function nextInterval() {
   setTimeout(function () {
     let passwordDidNotMatch = tryExecSync(
-      `docker logs 364c44949241 --tail 100 | grep Password\\ did\\ not\\ match`
+      `docker logs f0d2c83247ec --tail 100 | grep Password\\ did\\ not\\ match`
     )
       .toString()
       .split(/\r?\n/);
     let couldNotMatchLogin = tryExecSync(
-      `docker logs 364c44949241 --tail 100 | grep Could\\ not\\ find\\ a\\ login\\ matching`
+      `docker logs f0d2c83247ec --tail 100 | grep Could\\ not\\ find\\ a\\ login\\ matching`
     )
       .toString()
       .split(/\r?\n/);
